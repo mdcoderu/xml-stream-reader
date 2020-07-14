@@ -41,6 +41,13 @@ class Parser
      */
     protected $namespaces = array();
 
+    protected $yml_replace_param_with_tags;
+
+    public function __construct($yml_replace_param_with_tags = false)
+    {
+        $this->yml_replace_param_with_tags = $yml_replace_param_with_tags;
+    }
+
     /**
      * Parses the XML provided using streaming and callbacks
      *
@@ -383,10 +390,12 @@ class Parser
             $namespaceStr .= ' xmlns:' . $key . '="' . $val . '"';
         }
 
-        $pathData = preg_replace_callback('/<param name="(.*?)">(.*?)<\/param>/mui', function ($matches) {
-            $matches[1] = str_replace(' ', '', $matches[1]);
-            return '<' . $matches[1] . '>' . $matches[2] . '</' . $matches[1] . '>';
-        }, $pathData);
+        if ($this->yml_replace_param_with_tags) {
+            $pathData = preg_replace_callback('/<param name="(.*?)">(.*?)<\/param>/mui', function ($matches) {
+                $matches[1] = str_replace(' ', '', $matches[1]);
+                return '<' . $matches[1] . '>' . $matches[2] . '</' . $matches[1] . '>';
+            }, $pathData);
+        }
 
         //Build the SimpleXMLElement object. As this is a partial XML
         //document suppress any warnings or errors that might arise

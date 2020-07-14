@@ -1,0 +1,22 @@
+{
+    "name": "mdcoderu/xml-stream-reader",
+    "description": "PHP XML stream reader",
+    "type": "library",
+    "require": {
+        "php": ">=5.3.0",
+        "ext-xml": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MDcode",
+            "email": "bv.volkov@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Mdcoderu\\XmlStreamReader\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}

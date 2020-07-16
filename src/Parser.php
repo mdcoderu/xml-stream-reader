@@ -77,6 +77,8 @@ class Parser
         $this->parse = TRUE;
         $parser = xml_parser_create();
 
+        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
+
         //Set the parser up, ready to stream through the XML
         xml_set_object($parser, $this);
 
@@ -240,9 +242,6 @@ class Parser
      */
     protected function start($parser, $tag, $attributes)
     {
-        //Set the tag as lower case, for consistency
-        $tag = strtolower($tag);
-
         //Update the current path
         $this->currentPath .= $tag . '/';
 
@@ -266,12 +265,11 @@ class Parser
             }
 
             $val = htmlentities($val, $options, "UTF-8");
-            $data .= ' ' . strtolower($key) . '="' . $val . '"';
+            $data .= ' ' . $key . '="' . $val . '"';
 
             if (stripos($key, 'xmlns:') !== false) {
-                $key = strtolower($key);
                 $key = str_replace('xmlns:', '', $key);
-                $this->namespaces[strtolower($key)] = $val;
+                $this->namespaces[$key] = $val;
             }
         }
         $data .= '>';
@@ -329,9 +327,6 @@ class Parser
      */
     protected function end($parser, $tag)
     {
-        //Make the tag lower case, for consistency
-        $tag = strtolower($tag);
-
         //Add the data to the paths that require it
         $data = '</' . $tag . '>';
         $this->addData($parser, $data);
@@ -393,7 +388,6 @@ class Parser
         if ($this->yml_replace_param_with_tags) {
             $pathData = preg_replace_callback('/<param name="(.*?)"[^>]*>(.*?)<\/param>/mui', function ($matches) {
                 $matches[1] = str_replace(' ', '', $matches[1]);
-                $matches[1] = mb_strtolower($matches[1]);
                 return '<' . $matches[1] . '>' . $matches[2] . '</' . $matches[1] . '>';
             }, $pathData);
         }

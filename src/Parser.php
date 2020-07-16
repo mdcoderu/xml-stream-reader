@@ -393,6 +393,7 @@ class Parser
         if ($this->yml_replace_param_with_tags) {
             $pathData = preg_replace_callback('/<param name="(.*?)"[^>]*>(.*?)<\/param>/mui', function ($matches) {
                 $matches[1] = str_replace(' ', '', $matches[1]);
+                $matches[1] = mb_strtolower($matches[1]);
                 return '<' . $matches[1] . '>' . $matches[2] . '</' . $matches[1] . '>';
             }, $pathData);
         }

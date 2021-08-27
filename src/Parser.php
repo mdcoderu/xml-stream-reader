@@ -389,6 +389,9 @@ class Parser
             $pathData = preg_replace_callback('/<param name="(.*?)"[^>]*>(.*?)<\/param>/mui', function ($matches) {
                 $matches[1] = str_replace(' ', '', $matches[1]);
                 $matches[1] = preg_replace('/[^0-9a-zA-Zа-яА-Я]/mui', '', $matches[1]);
+                if (is_numeric(mb_substr($matches[1], 0, 1))) {
+                    $matches[1] = 'P' . $matches[1];
+                }
                 return '<' . $matches[1] . '>' . $matches[2] . '</' . $matches[1] . '>';
             }, $pathData);
         }
